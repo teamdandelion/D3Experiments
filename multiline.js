@@ -32,13 +32,14 @@ var svg = d3.select("body").append("svg")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 d3.tsv("data/multiline_data.tsv", function(error, data) {
-  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
+  var cityNames = d3.keys(data[0]).filter(function(key) {return key !== "date"})
+  color.domain(cityNames);
 
   data.forEach(function(d) {
     d.date = parseDate(d.date);
   });
 
-  var cities = color.domain().map(function(name) {
+  var cities = cityNames.map(function(name) {
     return {
       name: name,
       values: data.map(function(d) {
