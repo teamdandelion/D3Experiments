@@ -1,21 +1,23 @@
 var margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = 560 - margin.left - margin.right,
+    width = 700 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
 var x = d3.scale.log()
-    .domain([1E3, 1E7])
+    .domain([0.5E3, 1E7])
     .range([0, width]);
 
 var y = d3.scale.log()
-    .domain([200, .05])
+    .domain([200, .01])
     .range([0, height]);
 
 var xAxis = d3.svg.axis()
     .scale(x)
+    .ticks(null, "e")
     .orient("bottom");
 
 var yAxis = d3.svg.axis()
     .scale(y)
+    .ticks(null, "g")
     .orient("left");
 
 var color = d3.scale.category10();
