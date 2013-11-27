@@ -6,7 +6,7 @@ var x = d3.scale.linear()
     .range([0, width]);
 
 var y = d3.scale.linear()
-    .range([0, width]);
+    .range([0, height]);
 
 var xAxis = d3.svg.axis()
     .scale(x)
@@ -20,7 +20,7 @@ var color = d3.scale.category10();
 
 var line = d3.svg.line()
     .x(function(d) { return x(d.numPrimes); })
-    .y(function(d) { return x(d.seconds); });
+    .y(function(d) { return y(d.time); });
 
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -28,10 +28,11 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv("prime_times.csv", function(error, data) {
-  color.domain(d3.keys(data[0]).filter(function(key) {return key !== "numPrimes"; }));
+d3.csv("data/prime_times.csv", function(error, data) {
+  var languageNames = ["C", "Java", "Haskell", "Python"]
+  color.domain(languageNames);
 
-  var languages = color.domain().map(function(name) {
+  var languages = languageNames.map(function(name) {
     return {
       name: name,
       values: data.map(function(d) {
@@ -40,8 +41,14 @@ d3.csv("prime_times.csv", function(error, data) {
     };
   });
 
+  languages.forEach(function(language) {
+    language.values = language.values.filter(function(v) {
+      return v.time === v.time && v.time !== 0;
+    });
+  });
+
   x.domain([1000, 1000000]);
-  y.domain([0, 100]);
+  y.domain([100, 0]);
 
   svg.append("g")
       .attr("class", "x axis")
